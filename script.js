@@ -13,9 +13,33 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const factsList = document.getElementById('facts-list');
-    facts.forEach(fact => {
-        const listItem = document.createElement('li');
-        listItem.textContent = fact;
-        factsList.appendChild(listItem);
+    const newFactInput = document.getElementById('new-fact');
+    const addFactButton = document.getElementById('add-fact');
+
+    function renderFacts() {
+        factsList.innerHTML = ''; // Clear the list
+        facts.forEach((fact, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = fact;
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', () => {
+                facts.splice(index, 1);
+                renderFacts();
+            });
+            listItem.appendChild(deleteButton);
+            factsList.appendChild(listItem);
+        });
+    }
+
+    addFactButton.addEventListener('click', () => {
+        const newFact = newFactInput.value.trim();
+        if (newFact) {
+            facts.push(newFact);
+            newFactInput.value = ''; // Clear the input
+            renderFacts();
+        }
     });
+
+    renderFacts(); // Initial render
 });
